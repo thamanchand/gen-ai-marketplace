@@ -1,35 +1,34 @@
-import './globals.css'
-import { Inter } from 'next/font/google'
-import Navbar from './components/Navigation/Navbar'
-import AuthProvider from './context/AuthProvider'
-import Footer from './components/Footer/Footer';
-import Providers from './context/ThemeProvider';
+"use client";
+import "./globals.css";
+import { Inter } from "next/font/google";
+import Header from "./components/Navigation/Header";
+import AuthProvider from "./context/AuthProvider";
+import Footer from "./components/Footer/Footer";
+import Providers from "./context/ThemeProvider";
 
-const layoutClasses = "dark:bg-slate-900";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { ToastContainer } from "react-toastify";
 
-export const metadata = {
-  title: 'NextJS Strapi Starter with Auth',
-  description: 'A powerful, all-in-one boilerplate to kickstart your web development journey',
-}
+const queryClient = new QueryClient();
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
-      <body className={layoutClasses}>
-        <Providers>
-          <AuthProvider>
-            <Navbar />
-            <main>
-              {children}
-            </main>
-            <Footer />
-          </AuthProvider>
-        </Providers>
+      <body>
+        <QueryClientProvider client={queryClient}>
+          <Providers>
+            <AuthProvider>
+              <Header />
+              <main>{children}</main>
+              <Footer />
+            </AuthProvider>
+          </Providers>
+        </QueryClientProvider>
       </body>
     </html>
-  )
+  );
 }

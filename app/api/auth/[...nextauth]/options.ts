@@ -6,7 +6,7 @@ export const options: NextAuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-    })
+    }),
   ],
 
   // Custom signin page
@@ -15,9 +15,9 @@ export const options: NextAuthOptions = {
   },
 
   // Integrate to Strapi
-  session: { 
+  session: {
     strategy: "jwt",
-    maxAge: 86400 // 24 Hours
+    maxAge: 86400, // 24 Hours
   },
   callbacks: {
     async session({ session, token }) {
@@ -31,8 +31,9 @@ export const options: NextAuthOptions = {
         try {
           console.log("SSO Provider -> Strapi ", account);
           const public_url = process.env.STRAPI_PUBLIC_API_URL;
+          console.log("public url", public_url);
           const response = await fetch(
-            `${public_url}/api/auth/${account.provider}/callback?access_token=${account?.access_token}`
+            `http://127.0.0.1:1337/api/auth/google/callback?access_token=${account?.access_token}`
           );
           const data = await response.json();
           console.log("Strapi Callback Data", data);
@@ -47,4 +48,3 @@ export const options: NextAuthOptions = {
   },
   secret: process.env.NEXTAUTH_SECRET as string,
 };
-
